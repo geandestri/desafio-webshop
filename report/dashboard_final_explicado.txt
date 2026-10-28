@@ -1,0 +1,157 @@
+EXPLICACAO DO DASHBOARD FINAL - DEMO WEB SHOP
+
+Arquivo: report/execucoes/2026-10-28-5vu-final/html/dashboard.html
+Execucao: 28/10/2026, com 5 usuarios virtuais e 3 iteracoes por usuario.
+Executor: per-vu-iterations. Volume: 15 tentativas de compra.
+
+1. COMO INTERPRETAR A EXECUCAO
+
+Cada usuario virtual utiliza sua propria conta e executa tres compras em
+sequencia. Os cinco usuarios trabalham em paralelo, sem barreira entre as
+rodadas: um usuario pode iniciar sua proxima compra antes dos demais.
+Cada compra inclui login, busca, carrinho, checkout e consulta do pedido.
+O cadastro das cinco contas foi realizado antes, fora da medicao.
+
+O dashboard e um retrato dos arquivos da execucao. Funciona offline, sem
+servidor, e nao acompanha novos pedidos ou alteracoes de status em tempo real.
+O seletor no topo escolhe o conjunto de dados; nesta pagina existe somente
+o conjunto final. O nome resumo.json e o arquivo fonte, nao um cenario extra.
+
+2. CARTOES SUPERIORES
+
+Tentativas: 15
+Quantidade de registros emitidos pelo fluxo. Nao e numero de requisicoes
+HTTP: uma tentativa utiliza diversas requisicoes para concluir uma compra.
+
+Fluxos aprovados: 100%
+Proporcao dos registros com success=true. Aqui, todas as 15 tentativas
+concluiram as etapas ate a consulta do status. Nao depende apenas de HTTP 200.
+
+Pedidos com ID: 15
+Quantidade de IDs de pedido distintos nos registros. O indicador e separado
+de fluxos aprovados porque um pedido pode ser criado e uma etapa posterior
+falhar. Nesta execucao, todos os 15 pedidos tambem tiveram fluxo aprovado.
+
+Checks aprovados: 100%
+Foram 460 condicoes de validacao aprovadas, sem reprovacoes. Incluem login,
+extracao e reutilizacao da sessao, conta correta, carrinho vazio, produto,
+checkout, correspondencia do ID e status do pedido. Checks nao representam
+compras nem requisicoes: uma resposta pode ter varias validacoes.
+O total varia conforme o caminho, por exemplo endereco novo ou cadastrado.
+
+3. TEMPO POR ETAPA
+
+As barras mostram a media das duracoes medidas por etapa nas tentativas:
+- 5.1_login: autenticacao, extracao do cookie NOPCOMMERCE.AUTH, reinsercao no
+  jar e validacao da conta autenticada em /customer/info.
+- 5.2_products: consulta da listagem, parsing e selecao do produto.
+- 5.3_cart: adicao e verificacao da presenca do produto no carrinho.
+- 5.4_checkout: endereco, frete, pagamento, confirmacao e extracao do pedido.
+- 5.5_order_status: consulta dos detalhes e validacao do ID e do status.
+
+Os valores sao milissegundos e incluem requisicoes e processamento local.
+A barra mais longa indica maior tempo medio observado, nao comprova sozinha
+um gargalo. Etapas ausentes nao entram na media como zero.
+O tempo total pode superar a soma das etapas, pois inclui atividades fora
+dos blocos medidos, como a verificacao de carrinho vazio antes da compra.
+
+4. TEMPOS HTTP
+
+Media: aproximadamente 726,20 ms
+Media aritmetica das duracoes HTTP registradas nas 245 requisicoes.
+
+p95: aproximadamente 1749,20 ms
+Percentil 95 da distribuicao observada. Descreve a faixa superior dos tempos;
+nao significa que cada pedido levou esse tempo. O k6 pode interpolar percentis.
+
+Maximo: aproximadamente 5575,42 ms
+Maior duracao HTTP individual. Uma resposta acima de 2 segundos nao reprova
+isoladamente o teste, pois o criterio configurado limita o p95, nao o maximo.
+
+245 requisicoes / 0% de falhas HTTP
+Conta as requisicoes da execucao k6, incluindo os passos auxiliares do fluxo.
+Nao inclui os cadastros feitos antes. HTTP sem falha nao garante correcoes de
+negocio; por isso existem checks e a metrica flow_success.
+http_req_duration soma envio, espera e recebimento da resposta. Nao representa
+todo o tempo de conexao inicial, nem a duracao integral de uma compra.
+
+5. GRAFICO HTTP INTERATIVO
+
+Cada ponto representa uma amostra de http_req_duration. O eixo horizontal
+segue a ordem de coleta, nao uma escala de tempo com intervalos proporcionais.
+O eixo vertical mostra duracao em milissegundos; sua escala se adapta ao maior
+valor do conjunto. Como as requisicoes sao concorrentes, os pontos intercalam
+atividades de usuarios distintos. A linha nao e uma jornada de usuario unico.
+
+Ao mover o mouse, tocar ou selecionar um ponto com Tab, o painel inferior
+mostra numero da requisicao, duracao e horario original da amostra.
+O numero e a posicao no grafico, nao o ID do pedido nem o numero do VU.
+O ponto selecionado fica destacado. O grafico nao identifica endpoint ou VU;
+essas dimensoes podem ser consultadas nas tags de json/metricas.json.
+
+6. TABELA DE TENTATIVAS E PEDIDOS
+
+VU / iteracao: identifica o usuario virtual e sua iteracao, iniciada em zero.
+Existem cinco VUs com iteracoes 0, 1 e 2. A ordem das linhas acompanha a
+gravacao dos resultados, nao necessariamente a ordem numerica dos VUs.
+
+Pedido: ID dinamico extraido da confirmacao. Foram criados 15 IDs distintos,
+de 2406900 a 2406914. Sao pedidos reais do ambiente de demonstracao.
+
+Status: Pending em todos os registros. Significa pedido pendente na aplicacao;
+nao significa falha do teste. O status foi consultado apos a criacao e nao e
+atualizado automaticamente pelo dashboard.
+
+Resultado: Aprovado indica success=true, ou seja, fluxo concluido e validado.
+E diferente do estado comercial do pedido: Pending pode ter teste aprovado.
+
+Total: tempo decorrido daquela tentativa, incluindo processamento local.
+Nao e apenas HTTP, nao e tempo por requisicao e nao deve ser somado entre
+usuarios concorrentes para representar a duracao total da execucao.
+O teste completo durou aproximadamente 36,6 segundos de tempo de parede.
+
+Ultima etapa / erro: 5.5_order_status indica que o fluxo chegou a consulta
+final. Em falhas, mostra a ultima etapa iniciada e a mensagem de erro.
+A etapa 5.6 ocorre depois, emitindo o registro no bloco finally e gerando
+JSON/CSV pelo conversor. Por isso nao aparece como ultima etapa medida.
+
+7. CRITERIOS DE APROVACAO
+
+Todos os thresholds da execucao final foram atendidos:
+- checks rate==1: 100% das condicoes verificadas devem passar.
+- flow_success rate==1: 100% das tentativas devem concluir o fluxo.
+- http_req_failed rate<0.01: falhas HTTP inferiores a 1%.
+- http_req_duration p(95)<2000: p95 HTTP inferior a 2000 ms.
+
+Esses criterios foram definidos no projeto, nao como SLAs do enunciado.
+O threshold de dropped_iterations pertence aos perfis de chegada das grandes
+volumetrias; nao aparece como criterio deste executor per-vu-iterations.
+O gerador interpreta o resumo legado: true em thresholds significa violacao;
+false significa criterio atendido. Na tela isso vira aprovado ou reprovado.
+
+8. RASTREABILIDADE E CORRELACAO
+
+json/resumo.json: agregados k6, checks e thresholds.
+json/pedidos.json: registros completos das 15 tentativas.
+json/metricas.json: amostras JSON Lines utilizadas no grafico.
+csv/pedidos.csv: os mesmos registros por tentativa em formato tabular.
+logs/execucao.log: mensagens e registros RESULTADO_PEDIDO originais.
+
+O item 5.1 foi reforcado nesta execucao. O script extrai NOPCOMMERCE.AUTH
+da resposta original do login, valida valor presente, reinsere no cookie jar
+e confirma o email autenticado na requisicao seguinte. O jar mantem a sessao
+nas demais etapas. authCookieName e sessionCorrelated aparecem no JSON/CSV;
+o valor secreto do cookie nao e salvo. Esses campos nao sao colunas visiveis
+da tabela HTML atual; a aprovacao das verificacoes compoe o total de checks.
+
+9. CONCLUSAO TECNICA PARA APRESENTACAO
+
+O resultado comprova 15 compras completas, com cinco contas distintas,
+correlacao de sessao, IDs dinamicos e persistencia das evidencias. Demonstra
+repeticao e concorrencia basica com baixo volume, conforme o desafio.
+Nao comprova capacidade maxima, estabilidade prolongada ou comportamento
+das tres grandes volumetrias, que foram apenas configuradas. A amostra e
+pequena para conclusoes estatisticas sobre p95 em alta carga.
+
+Este documento e material local de apoio a apresentacao. Nao foi adicionado
+ao staging nem incluido em commit ou push nesta atividade.
