@@ -1,7 +1,7 @@
 RELATORIO - TESTE PRATICO DE PERFORMANCE
 Aplicacao: https://demowebshop.tricentis.com/
 Ferramentas: k6 (JavaScript) e Python 3 (biblioteca padrao)
-Data: 27/10/2026
+Data: 28/10/2026
 
 1. ESTRATEGIA E CONSTRUCAO
 
@@ -12,19 +12,24 @@ reutilizacao nos testes pequenos e nos tres perfis de volumetria.
 Como nao havia massa fornecida, scripts/register_users.py foi criado para
 cadastrar contas com dados ficticios na aplicacao real. Cada cadastro e validado
 por um novo login em sessao separada antes de salvar a credencial em JSON.
-Foram criadas duas contas, tambem verificadas manualmente. O cadastro ocorre
+Duas contas iniciais foram verificadas manualmente. Para a validacao final,
+foram cadastradas mais cinco contas com login verificado pelo script. O cadastro ocorre
 antes do teste, fora das medicoes. Cada VU utiliza uma conta distinta, carregada
 via SharedArray, evitando compartilhar carrinhos. Credenciais ficam em data/,
 ignoradas pelo Git, e nao sao incluidas nos resultados.
 
 Etapas do desafio, implementadas em tests/k6/:
 5.1 - login.js: abre o formulario, envia credenciais e confirma autenticacao
-pelo link de logout e ausencia de erros. O cookie jar do k6 mantem e reenvia
-os cookies da sessao entre requisicoes do mesmo VU. Falhas interrompem o fluxo.
+pela extracao explicita de NOPCOMMERCE.AUTH na resposta original do POST
+(redirects: 0). O valor e reinserido no cookie jar e conferido antes do GET
+a /customer/info, que valida o link de logout e o email da conta. O jar reenvia
+o cookie nas etapas seguintes. Somente o nome do cookie e sessionCorrelated
+sao salvos; o segredo nao e registrado. Falhas interrompem o fluxo.
 5.2 - products.js: consulta Books e extrai ID, nome e URL de compra de produtos
 com compra direta. Seleciona aleatoriamente um produto, sem ID fixo no codigo.
 5.3 - cart.js: adiciona uma unidade pela URL extraida, valida o retorno JSON
-e confirma a presenca do produto no carrinho pelo nome.
+e confirma a presenca do produto no carrinho pelo nome. Antes de cada compra,
+o fluxo agora exige carrinho vazio para impedir compras com itens residuais.
 5.4 - checkout.js: executa endereco, entrega, frete, pagamento e confirmacao
 por requisicoes AJAX. Reutiliza endereco cadastrado ou dados ficticios;
 correlaciona pais, estado, frete e etapas retornadas. Usa pagamento na entrega
@@ -71,28 +76,41 @@ As duas contas atuais servem ao teste pequeno, nao aos perfis grandes.
 Todos os perfis foram validados com k6 inspect, sem executar as cargas,
 conforme permitido pelo desafio.
 
-3. RESULTADOS OBTIDOS
+3. VALIDACAO FINAL PROPOSTA E RESULTADO OBTIDO
 
-Evidencia principal: report/execucoes/2026-10-27-2vu/.
-Foram executados 2 VUs em paralelo, uma iteracao por VU, com per-vu-iterations
-(tests/k6/parallel.js). Login e carrinhos vazios foram conferidos previamente.
-Ambos concluiram login, busca, carrinho, checkout e consulta na mesma iteracao.
+Configuracao aprovada para demonstrar concorrencia e repeticao em baixo volume:
+- Executor: per-vu-iterations.
+- Usuarios virtuais: 5, com uma conta distinta por VU.
+- Iteracoes: 3 por usuario; total de 15 tentativas de compra.
+- Fluxo: login -> produto -> carrinho -> checkout -> consulta do status.
+- Evidencias: logs, metricas, JSON, CSV e dashboard HTML.
+- Script: tests/k6/final_validation.js; maxDuration: 5m.
 
-- Fluxos completos aprovados: 2/2 (100%). Checks: 54/54 aprovados.
-- HTTP: 31 requisicoes, nenhuma falha; todos os thresholds aprovados.
-- Duracao HTTP: media 720,80 ms; p95 1413,30 ms; maxima 4597,06 ms.
-- VU 1: pedido 2406111, status Pending, fluxo de 13.898 ms.
-- VU 2: pedido 2406109, status Pending, fluxo de 9.876 ms.
+Execucao realizada em 28/10/2026, com cadastro fora da medicao. Os cinco VUs
+iniciam juntos e executam suas tres compras sequencialmente. A concorrencia
+pode diminuir quando os VUs terminam; nao e carga constante por duracao fixa.
+Em cada iteracao foram validadas extracao e reutilizacao do cookie de
+autenticacao, correspondencia da conta e precondicao de carrinho vazio.
 
-Uma resposta acima de 2 s nao reprova isoladamente o criterio de p95.
-Os tempos do fluxo incluem processamento local e excluem a emissao do registro
-e a pausa final existente naquela versao. O teste de baixo volume demonstra
-funcionamento do fluxo, sem conclusoes sobre capacidade ou estabilidade em carga.
+Evidencia principal: report/execucoes/2026-10-28-5vu-final/.
+- Fluxos completos aprovados: 15/15 (100%); 3 iteracoes por cada um dos 5 VUs.
+- Checks: 460/460 aprovados; todos os thresholds atendidos.
+- HTTP: 245 requisicoes, zero falhas.
+- Duracao HTTP: media 726,20 ms; p95 1749,20 ms; maxima 5575,42 ms.
+- Pedidos: 15 IDs distintos, de 2406900 a 2406914, todos com status Pending.
+- Tempo de parede da execucao: aproximadamente 36,6 segundos.
 
-A evidencia anterior (2026-10-27-1vu) permanece como historico de diagnostico:
-um pedido foi criado, a extracao do status falhou e a consulta foi corrigida
-e revalidada separadamente. Essa tentativa original nao foi reclassificada como
-sucesso. Depois, a execucao paralela acima validou o fluxo completo corrigido.
+O maximo acima de 2 s nao viola isoladamente o criterio de p95. Tempos por
+etapa e por tentativa estao no JSON/CSV; duracoes concorrentes nao devem ser
+somadas para representar tempo de parede. Os registros preservam somente
+metadados da correlacao, sem valores dos cookies ou senhas.
+
+As evidencias de 1 VU (diagnostico e reconsulta separados) e de 2 VUs
+(54/54 checks aprovados) foram preservadas como historico. A validacao final
+acima exercita o fluxo com a correlacao explicita acrescentada ao item 5.1.
+O volume pequeno atende a demonstracao solicitada, mas nao permite concluir
+capacidade maxima, estabilidade prolongada ou comportamento em alta carga.
+Os tres perfis grandes continuam apenas configurados, sem execucao.
 
 4. EVIDENCIAS E ENTREGA
 
@@ -106,15 +124,15 @@ csv/ e html/. A evidencia principal inclui:
 
 O dashboard e gerado por scripts/build_dashboard.py, funciona offline e mostra
 resultados por conjunto de evidencias, sem misturar compra e reconsulta.
-Comandos de reproducao estao no README.md. Resultados sao ignorados pelo Git:
-as evidencias precisam acompanhar a entrega separadamente.
+Comandos de reproducao estao no README.md. As evidencias em report/execucoes/ sao versionadas junto do projeto;
+credenciais em data/ continuam fora do Git.
 A limpeza manual (cleanup_reports.py) mantem as cinco execucoes mais recentes,
 preserva pastas com marcador ENTREGA e apenas simula sem a opcao --apply.
 
 5. LIMITACOES E MELHORIAS
 
-- Automatizar a verificacao de carrinho vazio: atualmente foi feita antes do
-  teste aprovado. A adicao valida presenca pelo nome, nao incremento da quantidade.
+- A precondicao de carrinho vazio agora e automatica. A adicao ainda valida
+  presenca pelo nome; pode-se reforcar a verificacao da quantidade e do ID.
 - Validar sessao expirada, pedido inacessivel e falhas intermediarias.
 - Manter o ID recuperavel se o servidor criar o pedido, mas sua resposta falhar.
 - Emails ficticios nao recebem mensagens; confirmacao por email nao foi validada.

@@ -29,7 +29,7 @@ def main():
     fields = [
         'vu', 'iteration', 'startedAt', 'finishedAt', 'success', 'productId',
         'orderId', 'status', 'statusHttp', 'queriedAt', 'lastStage', 'error',
-        'totalDurationMs', 'statusRequestDurationMs',
+        'totalDurationMs', 'statusRequestDurationMs', 'authCookieName', 'sessionCorrelated',
     ]
     stages = ['5.1_login', '5.2_products', '5.3_cart', '5.4_checkout', '5.5_order_status']
     json_path = Path(f'{args.output_prefix}.json')

@@ -48,8 +48,9 @@ export function loginUser(email, password) {
   };
 
   return group('Submit login form', () => {
-    const loginResponse = http.post(`${BASE_URL}/login`, payload, {
-      redirects: 3,
+    const authResponse = http.post(`${BASE_URL}/login`, payload, {
+      // Captura o cookie na resposta original, antes do redirecionamento.
+      redirects: 0,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Origin: BASE_URL,
@@ -57,19 +58,35 @@ export function loginUser(email, password) {
       },
     });
 
-    const loginFailed = /login was unsuccessful|no customer account found|please correct the errors/i.test(
-      loginResponse.body || ''
-    );
+    const cookieName = 'NOPCOMMERCE.AUTH';
+    const authCookie = (authResponse.cookies[cookieName] || [])[0];
+    const extracted = check(authResponse, {
+      'login redirects after authentication': (r) => r.status === 302,
+      'authentication cookie extracted from response': () => !!authCookie && !!authCookie.value,
+    });
+    if (!extracted) fail('Login nao retornou o cookie de autenticacao esperado.');
+
+    // Correlacao explicita: reinserir o valor extraido no jar deste VU.
+    // Nunca registrar ou retornar o segredo nas evidencias.
+    const jar = http.cookieJar();
+    jar.set(BASE_URL, cookieName, authCookie.value, { path: '/', secure: true });
+    const retained = jar.cookiesForURL(`${BASE_URL}/customer/info`)[cookieName] || [];
+    if (!check(retained, {
+      'extracted authentication cookie reused in session': (values) => values.includes(authCookie.value),
+    })) fail('Cookie extraido nao foi correlacionado a sessao.');
+
+    const loginResponse = http.get(`${BASE_URL}/customer/info`);
 
     const authenticated = !!loginResponse.body && loginResponse.html().find('a[href="/logout"]').size() > 0;
     const valid = check(loginResponse, {
       'login response status is 200': (r) => r.status === 200,
-      'login did not fail with invalid credentials': (r) => !loginFailed,
       'authenticated session confirmed': () => authenticated,
+      'authenticated account matches credentials': (r) =>
+        r.status === 200 && r.html().find('input[name="Email"]').attr('value') === email,
     });
     if (!valid) fail('Login falhou. Confira USER_EMAIL e USER_PASSWORD.');
 
-    return loginResponse;
+    return { authCookieName: cookieName, sessionCorrelated: true };
   });
 }
 
@@ -91,7 +108,15 @@ export default function () {
   };
   const stage = (name, action) => measureStage(result, name, action);
   try {
-    stage('5.1_login', () => loginUser(user.email, user.password));
+    const auth = stage('5.1_login', () => loginUser(user.email, user.password));
+    result.authCookieName = auth.authCookieName;
+    result.sessionCorrelated = auth.sessionCorrelated;
+    const cart = http.get(`${BASE_URL}/cart`);
+    if (!check(cart, {
+      'cart empty before purchase': (r) => r.status === 200 &&
+        r.html().find('.cart-item-row').size() === 0 &&
+        /Your Shopping Cart is empty!/i.test(r.body || ''),
+    })) fail('Carrinho deve estar vazio antes da compra.');
     const product = stage('5.2_products', () => findProduct());
     result.productId = product.id;
     stage('5.3_cart', () => addToCart(product));

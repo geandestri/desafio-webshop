@@ -1,5 +1,12 @@
 # Proximos passos
 
+Validacao final concluida em 28/10/2026: cookie NOPCOMMERCE.AUTH extraido
+explicitamente e reutilizado, 5 VUs x 3 iteracoes, 15 compras, 460/460 checks,
+zero falhas HTTP. Carrinho vazio validado automaticamente a cada iteracao.
+Evidencia atual: report/execucoes/2026-10-28-5vu-final/html/dashboard.html.
+Relatorio atualizado com configuracao aprovada e resultado real.
+Os resultados abaixo de 27/10 permanecem como historico.
+
 Plano registrado em 27/10/2026 para revisao posterior.
 
 - [x] Validar novamente o fluxo completo apos as correcoes, com evidencia

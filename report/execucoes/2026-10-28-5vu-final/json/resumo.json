@@ -1,0 +1,418 @@
+{
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "Open login page": {
+                "name": "Open login page",
+                "path": "::Open login page",
+                "id": "4ea7fbfaca4bba922c523d8337fa8176",
+                "groups": {},
+                "checks": {
+                        "login page loaded successfully": {
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "login page loaded successfully",
+                            "path": "::Open login page::login page loaded successfully",
+                            "id": "c4425cdff235eba1dcbaf0fad30b464e"
+                        },
+                        "login form is available": {
+                            "name": "login form is available",
+                            "path": "::Open login page::login form is available",
+                            "id": "36a8af75f4a91bfcdf39ddf80932ac17",
+                            "passes": 15,
+                            "fails": 0
+                        }
+                    }
+            },
+            "Submit login form": {
+                "name": "Submit login form",
+                "path": "::Submit login form",
+                "id": "d146adb7ddd3cc8781a2de2e2873b38e",
+                "groups": {},
+                "checks": {
+                        "login redirects after authentication": {
+                            "name": "login redirects after authentication",
+                            "path": "::Submit login form::login redirects after authentication",
+                            "id": "d961dd102bd0c0f44fc43e5aa55e2b26",
+                            "passes": 15,
+                            "fails": 0
+                        },
+                        "authentication cookie extracted from response": {
+                            "path": "::Submit login form::authentication cookie extracted from response",
+                            "id": "4935cfd41c82dac6e52984993a6b9054",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "authentication cookie extracted from response"
+                        },
+                        "extracted authentication cookie reused in session": {
+                            "name": "extracted authentication cookie reused in session",
+                            "path": "::Submit login form::extracted authentication cookie reused in session",
+                            "id": "0765ea22592dd947837f548687d13a2c",
+                            "passes": 15,
+                            "fails": 0
+                        },
+                        "login response status is 200": {
+                            "path": "::Submit login form::login response status is 200",
+                            "id": "527593fb6b17aa99e5faf354ba2f0909",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "login response status is 200"
+                        },
+                        "authenticated session confirmed": {
+                            "id": "1392e55e4fab164cfe20596471b63245",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "authenticated session confirmed",
+                            "path": "::Submit login form::authenticated session confirmed"
+                        },
+                        "authenticated account matches credentials": {
+                            "name": "authenticated account matches credentials",
+                            "path": "::Submit login form::authenticated account matches credentials",
+                            "id": "b10228943b8e77644746661d5930af3d",
+                            "passes": 15,
+                            "fails": 0
+                        }
+                    }
+            },
+            "5.2 - Busca de produtos": {
+                "groups": {},
+                "checks": {
+                        "listagem carregada": {
+                            "id": "b606f090bdb4ae1307628353295874a1",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "listagem carregada",
+                            "path": "::5.2 - Busca de produtos::listagem carregada"
+                        },
+                        "IDs de produtos extraidos": {
+                            "path": "::5.2 - Busca de produtos::IDs de produtos extraidos",
+                            "id": "00b6da8d0ffe24de221bc28058795bb4",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "IDs de produtos extraidos"
+                        }
+                    },
+                "name": "5.2 - Busca de produtos",
+                "path": "::5.2 - Busca de produtos",
+                "id": "8b5351c5523e8e644c4b442c8d29939a"
+            },
+            "5.3 - Adicao ao carrinho": {
+                "name": "5.3 - Adicao ao carrinho",
+                "path": "::5.3 - Adicao ao carrinho",
+                "id": "afb6263ab6eb2b302b91345a07e47b4f",
+                "groups": {},
+                "checks": {
+                        "adicao retornou HTTP 200": {
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "adicao retornou HTTP 200",
+                            "path": "::5.3 - Adicao ao carrinho::adicao retornou HTTP 200",
+                            "id": "28bf513b2ddd0029cab3edf1593ab9b9"
+                        },
+                        "API confirmou adicao": {
+                            "name": "API confirmou adicao",
+                            "path": "::5.3 - Adicao ao carrinho::API confirmou adicao",
+                            "id": "ffc413d8c21d60432c861d31df46e355",
+                            "passes": 15,
+                            "fails": 0
+                        },
+                        "carrinho carregado": {
+                            "path": "::5.3 - Adicao ao carrinho::carrinho carregado",
+                            "id": "08eede3b6c8d338ace7df1d3ee821c2a",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "carrinho carregado"
+                        },
+                        "produto presente no carrinho": {
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "produto presente no carrinho",
+                            "path": "::5.3 - Adicao ao carrinho::produto presente no carrinho",
+                            "id": "37692dfb3dfabd89453c953c6855ca9d"
+                        }
+                    }
+            },
+            "5.4 - Finalizacao da compra": {
+                "id": "106b24f96f69d3e1f8e7ed42e6663a4d",
+                "groups": {},
+                "checks": {
+                        "checkout autenticado carregado": {
+                            "fails": 0,
+                            "name": "checkout autenticado carregado",
+                            "path": "::5.4 - Finalizacao da compra::checkout autenticado carregado",
+                            "id": "bd1ec348a34f8269ce5edfe0138d3a26",
+                            "passes": 15
+                        },
+                        "consulta de estados retornou HTTP 200": {
+                            "path": "::5.4 - Finalizacao da compra::consulta de estados retornou HTTP 200",
+                            "id": "36992ffdd3eda0c2aa9c9e90833495f5",
+                            "passes": 5,
+                            "fails": 0,
+                            "name": "consulta de estados retornou HTTP 200"
+                        },
+                        "lista de estados valida": {
+                            "name": "lista de estados valida",
+                            "path": "::5.4 - Finalizacao da compra::lista de estados valida",
+                            "id": "d4d7ad0efd3d34ca24c45f489f038641",
+                            "passes": 5,
+                            "fails": 0
+                        },
+                        "checkout billing aceito": {
+                            "id": "5236dd731a9a2c46d8f3b4fd52815d22",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "checkout billing aceito",
+                            "path": "::5.4 - Finalizacao da compra::checkout billing aceito"
+                        },
+                        "checkout shipping aceito": {
+                            "fails": 0,
+                            "name": "checkout shipping aceito",
+                            "path": "::5.4 - Finalizacao da compra::checkout shipping aceito",
+                            "id": "533c76fafc41b97fc7e7ebc1d8f12f10",
+                            "passes": 15
+                        },
+                        "checkout shipping-method aceito": {
+                            "path": "::5.4 - Finalizacao da compra::checkout shipping-method aceito",
+                            "id": "3a17bc4f9a9697d56ddb4693fcadcda1",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "checkout shipping-method aceito"
+                        },
+                        "checkout payment-method aceito": {
+                            "id": "f499ac95f688995a36abc02c55814367",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "checkout payment-method aceito",
+                            "path": "::5.4 - Finalizacao da compra::checkout payment-method aceito"
+                        },
+                        "checkout payment-info aceito": {
+                            "id": "416b9eed10ef59242c5f3777e1606022",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "checkout payment-info aceito",
+                            "path": "::5.4 - Finalizacao da compra::checkout payment-info aceito"
+                        },
+                        "checkout confirm-order aceito": {
+                            "name": "checkout confirm-order aceito",
+                            "path": "::5.4 - Finalizacao da compra::checkout confirm-order aceito",
+                            "id": "fb5d2065ca36d493b10498ac0bf9096e",
+                            "passes": 15,
+                            "fails": 0
+                        },
+                        "pedido confirmado pelo servidor": {
+                            "name": "pedido confirmado pelo servidor",
+                            "path": "::5.4 - Finalizacao da compra::pedido confirmado pelo servidor",
+                            "id": "08530dfb43650dbdd25fe4681d1f3b79",
+                            "passes": 15,
+                            "fails": 0
+                        },
+                        "pagina de pedido concluido carregada": {
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "pagina de pedido concluido carregada",
+                            "path": "::5.4 - Finalizacao da compra::pagina de pedido concluido carregada",
+                            "id": "62428c5c8fe93e35f221ebbd5f474542"
+                        },
+                        "ID do pedido extraido": {
+                            "path": "::5.4 - Finalizacao da compra::ID do pedido extraido",
+                            "id": "6e4d4711a1df1e561c8dd029cd7cc028",
+                            "passes": 15,
+                            "fails": 0,
+                            "name": "ID do pedido extraido"
+                        }
+                    },
+                "name": "5.4 - Finalizacao da compra",
+                "path": "::5.4 - Finalizacao da compra"
+            },
+            "5.5 - Consulta do status do pedido": {
+                "checks": {
+                    "consulta do pedido retornou HTTP 200": {
+                        "name": "consulta do pedido retornou HTTP 200",
+                        "path": "::5.5 - Consulta do status do pedido::consulta do pedido retornou HTTP 200",
+                        "id": "c47b0ba6be5ff46f8f71294d65fd135b",
+                        "passes": 15,
+                        "fails": 0
+                    },
+                    "pagina de detalhes do pedido encontrada": {
+                        "name": "pagina de detalhes do pedido encontrada",
+                        "path": "::5.5 - Consulta do status do pedido::pagina de detalhes do pedido encontrada",
+                        "id": "4ec4248dee9af7830414a092654d7310",
+                        "passes": 15,
+                        "fails": 0
+                    },
+                    "ID consultado corresponde ao pedido criado": {
+                        "name": "ID consultado corresponde ao pedido criado",
+                        "path": "::5.5 - Consulta do status do pedido::ID consultado corresponde ao pedido criado",
+                        "id": "bd34daf00bbcec59697c57ebe83f62ac",
+                        "passes": 15,
+                        "fails": 0
+                    },
+                    "status do pedido reconhecido": {
+                        "fails": 0,
+                        "name": "status do pedido reconhecido",
+                        "path": "::5.5 - Consulta do status do pedido::status do pedido reconhecido",
+                        "id": "3243cbec61a276aa223a556984a81049",
+                        "passes": 15
+                    },
+                    "status corresponde ao esperado quando configurado": {
+                        "name": "status corresponde ao esperado quando configurado",
+                        "path": "::5.5 - Consulta do status do pedido::status corresponde ao esperado quando configurado",
+                        "id": "99a932ad7a49f55cf986ec39117b01ca",
+                        "passes": 15,
+                        "fails": 0
+                    }
+                },
+                "name": "5.5 - Consulta do status do pedido",
+                "path": "::5.5 - Consulta do status do pedido",
+                "id": "0d05bdfb613e6bdf286214b162eb1fef",
+                "groups": {}
+            }
+        },
+        "checks": {
+            "cart empty before purchase": {
+                "fails": 0,
+                "name": "cart empty before purchase",
+                "path": "::cart empty before purchase",
+                "id": "4fe24838d77c5a9f1ec772b2da569fdd",
+                "passes": 15
+            }
+        }
+    },
+    "metrics": {
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 245,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "http_req_duration": {
+            "avg": 726.1993318367353,
+            "min": 247.4782,
+            "med": 443.7254,
+            "max": 5575.4197,
+            "p(90)": 1253.47162,
+            "p(95)": 1749.201519999996,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "http_req_connecting": {
+            "min": 0,
+            "med": 0,
+            "max": 189.4465,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 3.843804081632653
+        },
+        "http_reqs": {
+            "count": 245,
+            "rate": 6.699725390561859
+        },
+        "vus": {
+            "value": 5,
+            "min": 5,
+            "max": 5
+        },
+        "flow_success": {
+            "passes": 15,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "http_req_blocked": {
+            "min": 0,
+            "med": 0,
+            "max": 728.3069,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 14.816444081632651
+        },
+        "data_received": {
+            "count": 4061334,
+            "rate": 111060.50007898839
+        },
+        "http_req_sending": {
+            "avg": 0.034124489795918374,
+            "min": 0,
+            "med": 0,
+            "max": 0.5448,
+            "p(90)": 0,
+            "p(95)": 0.50462
+        },
+        "http_req_tls_handshaking": {
+            "avg": 10.408162857142857,
+            "min": 0,
+            "med": 0,
+            "max": 513.3033,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "data_sent": {
+            "count": 262265,
+            "rate": 7171.850936962065
+        },
+        "http_req_waiting": {
+            "avg": 717.6815865306123,
+            "min": 247.4782,
+            "med": 436.7815,
+            "max": 5575.4197,
+            "p(90)": 1246.40398,
+            "p(95)": 1748.713839999996
+        },
+        "http_req_receiving": {
+            "max": 223.4902,
+            "p(90)": 9.005279999999999,
+            "p(95)": 10.23964,
+            "avg": 8.483620816326528,
+            "min": 0,
+            "med": 5.6754
+        },
+        "group_duration": {
+            "avg": 1953.952231111111,
+            "min": 536.8994,
+            "med": 946.4374,
+            "max": 9535.4972,
+            "p(90)": 6857.351320000006,
+            "p(95)": 8364.464019999996
+        },
+        "iterations": {
+            "count": 15,
+            "rate": 0.41018726880990974
+        },
+        "checks": {
+            "fails": 0,
+            "passes": 460,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "vus_max": {
+            "min": 5,
+            "max": 5,
+            "value": 5
+        },
+        "http_req_duration{expected_response:true}": {
+            "med": 443.7254,
+            "max": 5575.4197,
+            "p(90)": 1253.47162,
+            "p(95)": 1749.201519999996,
+            "avg": 726.1993318367353,
+            "min": 247.4782
+        },
+        "iteration_duration": {
+            "p(95)": 14073.427239999999,
+            "avg": 12130.038286666666,
+            "min": 8695.3332,
+            "med": 13551.0566,
+            "max": 14088.4715,
+            "p(90)": 13930.4161
+        }
+    }
+}

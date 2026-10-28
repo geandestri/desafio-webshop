@@ -12,9 +12,11 @@ report/      Relat?rio TXT e evid?ncias por execu??o
 
 ## Evid?ncia principal
 
-O [teste com dois usu?rios](report/execucoes/2026-10-27-2vu/LEIA-ME.md) concluiu
-as duas compras: 54/54 checks, zero falhas HTTP e todos os thresholds aprovados.
-Abra o [dashboard](report/execucoes/2026-10-27-2vu/html/dashboard.html).
+A [valida??o final](report/execucoes/2026-10-28-5vu-final/LEIA-ME.md) executou
+5 VUs com 3 compras por usu?rio: 15/15 fluxos e 460/460 checks aprovados,
+zero falhas HTTP e todos os thresholds atendidos. Inclui extra??o expl?cita
+do cookie de autentica??o e valida??o de carrinho vazio em cada compra.
+Abra o [dashboard final](report/execucoes/2026-10-28-5vu-final/html/dashboard.html).
 A estrat?gia, resultados e limita??es est?o no [relat?rio](report/relatorio.txt).
 
 ## Preparar contas
@@ -23,15 +25,15 @@ Requisitos: k6 e Python 3 no PATH. Execute os comandos na raiz, no PowerShell.
 Se precisar criar uma nova massa:
 
 ```powershell
-python scripts/register_users.py --count 2 --output data/novos-usuarios.json
+python scripts/register_users.py --count 5 --output data/novos-usuarios.json
 ```
 
 O script cadastra contas reais e confirma um novo login antes de salvar.
 N?o sobrescreve arquivos existentes. Cadastro fica fora dos tempos do teste.
-Para usar as duas contas j? verificadas:
+Para usar as cinco contas da valida??o final j? cadastradas:
 
 ```powershell
-$env:USERS_FILE = (Resolve-Path 'data/users-verificados.json').Path
+$env:USERS_FILE = (Resolve-Path 'data/users-validacao-final.json').Path
 ```
 
 Para uma nova massa, indique seu caminho em `USERS_FILE`. Cada VU precisa de
@@ -39,7 +41,7 @@ uma conta distinta. Credenciais n?o acompanham o Git: gere a massa ao reproduzir
 
 ## Executar o teste pequeno e gerar evid?ncias
 
-Confira que os carrinhos est?o vazios. O comando confirma **duas compras reais
+Confira que os carrinhos est?o vazios. O comando confirma **15 compras reais
 no ambiente de demonstra??o**, incluindo qualquer item j? presente no carrinho.
 
 ```powershell
@@ -47,13 +49,13 @@ $runReport = "report/execucoes/$(Get-Date -Format 'yyyy-MM-dd-HHmmss')"
 foreach ($tipo in @('logs', 'json', 'csv', 'html')) {
     New-Item -ItemType Directory -Path "$runReport/$tipo" -Force | Out-Null
 }
-k6 run --log-format raw --console-output "$runReport/logs/execucao.log" --out "json=$runReport/json/metricas.json" --summary-export "$runReport/json/resumo.json" tests/k6/parallel.js
+k6 run --log-format raw --console-output "$runReport/logs/execucao.log" --out "json=$runReport/json/metricas.json" --summary-export "$runReport/json/resumo.json" tests/k6/final_validation.js
 python scripts/export_results.py "$runReport/logs/execucao.log" --output-prefix "$runReport/json/pedidos" --csv-prefix "$runReport/csv/pedidos"
 python scripts/build_dashboard.py $runReport
 ```
 
-O cen?rio garante uma itera??o por VU. Para testar com apenas uma conta,
-substitua `tests/k6/parallel.js` por `tests/k6/login.js` (1 VU / 1 itera??o).
+O cen?rio garante tr?s itera??es por VU. O perfil hist?rico `parallel.js` mant?m duas contas e uma itera??o por VU. Para testar com apenas uma conta,
+substitua `tests/k6/final_validation.js` por `tests/k6/login.js` (1 VU / 1 itera??o).
 Execute a exporta??o tamb?m se o k6 reprovar; ela preserva tentativas com erro.
 Abra `$runReport/html/dashboard.html` no navegador. N?o exige servidor ou internet.
 O gerador l? o formato legado de `--summary-export` e as amostras de m?tricas.
@@ -87,7 +89,7 @@ k6 inspect tests/k6/volumetry3.js
 - Consulta de pedido existente sem outra compra:
 
 ```powershell
-$env:ORDER_ID = '2406111'
+$env:ORDER_ID = '<ID de pedido da primeira conta da massa>'
 k6 run tests/k6/verify_order.js
 ```
 
