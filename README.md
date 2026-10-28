@@ -1,48 +1,61 @@
-# Demo Web Shop ? teste de performance
+# Demo Web Shop - teste de performance
 
-Teste HTTP em k6 cobrindo login, busca, carrinho, checkout, consulta do pedido
-e exporta??o de resultados. Python 3 usa apenas a biblioteca padr?o.
+Teste HTTP com k6: login, busca, carrinho, checkout, consulta e exportacao.
+Python 3 utiliza apenas a biblioteca padrao para massa e processamento.
 
-```text
-tests/k6/    Fluxo, cen?rio paralelo e tr?s volumetrias
-scripts/     Cadastro, exporta??o, dashboard e limpeza
-data/        Credenciais locais (fora do Git)
-report/      Relat?rio TXT e evid?ncias por execu??o
-```
+## Resultado e documentos
 
-## Evid?ncia principal
+A validacao final executou **5 VUs x 3 compras**, com 15/15 fluxos,
+460/460 checks aprovados e zero falhas HTTP. As tres volumetrias grandes
+foram configuradas, sem execucao, conforme o desafio.
 
-A [valida??o final](report/execucoes/2026-10-28-5vu-final/LEIA-ME.md) executou
-5 VUs com 3 compras por usu?rio: 15/15 fluxos e 460/460 checks aprovados,
-zero falhas HTTP e todos os thresholds atendidos. Inclui extra??o expl?cita
-do cookie de autentica??o e valida??o de carrinho vazio em cada compra.
-Abra o [dashboard final](report/execucoes/2026-10-28-5vu-final/html/dashboard.html).
-A estrat?gia, resultados e limita??es est?o no [relat?rio](report/relatorio.txt).
+- [Relatorio do desafio](report/relatorio.txt): estrategia, resultados e melhorias.
+- [Dashboard final](report/execucoes/2026-10-28-5vu-final/html/dashboard.html).
+- [Dados das compras](report/execucoes/2026-10-28-5vu-final/json/pedidos.json).
 
-## Preparar contas
+As evidencias anteriores sao historico; a execucao final e a referencia principal.
 
-Requisitos: k6 e Python 3 no PATH. Execute os comandos na raiz, no PowerShell.
-Se precisar criar uma nova massa:
+## Preparar a massa
+
+Requisitos: k6 e Python 3 no PATH. Comandos no PowerShell, na raiz do projeto.
+Para cadastrar cinco contas reais e validar um novo login por conta:
 
 ```powershell
 python scripts/register_users.py --count 5 --output data/novos-usuarios.json
+$env:USERS_FILE = (Resolve-Path 'data/novos-usuarios.json').Path
 ```
 
-O script cadastra contas reais e confirma um novo login antes de salvar.
-N?o sobrescreve arquivos existentes. Cadastro fica fora dos tempos do teste.
-Para usar as cinco contas da valida??o final j? cadastradas:
+O cadastro fica fora da medicao. Nao sobrescreve arquivo existente.
+Para reutilizar as contas locais da validacao final, indique
+`data/users-validacao-final.json` em USERS_FILE. Credenciais nao acompanham o Git;
+quem clonar o projeto deve gerar sua propria massa. Cada VU usa uma conta distinta.
+
+## Executar e gerar resultados
+
+O runner verifica dependencias e massa, executa o k6 e gera JSON, CSV e HTML:
 
 ```powershell
-$env:USERS_FILE = (Resolve-Path 'data/users-validacao-final.json').Path
+.\scripts\run_tests.ps1 -Scenario final -UsersFile .\data\novos-usuarios.json
 ```
 
-Para uma nova massa, indique seu caminho em `USERS_FILE`. Cada VU precisa de
-uma conta distinta. Credenciais n?o acompanham o Git: gere a massa ao reproduzir.
+Cenarios: `single` (1 VU / 1 compra), `parallel` (2 VUs / 2 compras) e
+`final` (5 VUs / 3 compras por VU, total 15). O padrao e `final`.
+Para a massa local ja cadastrada, use `data/users-validacao-final.json`.
+O runner cria a pasta em report/execucoes/, informa o caminho do dashboard e
+registra os codigos de saida em json/runner.json. Retorna falha se o k6
+reprovar ou se o processamento dos resultados falhar. Nao cadastra contas,
+nao limpa evidencias e nao disponibiliza as grandes volumetrias.
+Se o PowerShell bloquear scripts locais, pode-se executar sem alterar a
+politica permanente da maquina:
 
-## Executar o teste pequeno e gerar evid?ncias
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\run_tests.ps1 -Scenario final -UsersFile .\data\novos-usuarios.json
+```
 
-Confira que os carrinhos est?o vazios. O comando confirma **15 compras reais
-no ambiente de demonstra??o**, incluindo qualquer item j? presente no carrinho.
+Os comandos equivalentes, para executar manualmente, estao abaixo.
+
+O cenario confirma **15 compras reais no ambiente de demonstracao**.
+Cada iteracao exige carrinho vazio; se houver itens residuais, falha antes da compra.
 
 ```powershell
 $runReport = "report/execucoes/$(Get-Date -Format 'yyyy-MM-dd-HHmmss')"
@@ -54,24 +67,23 @@ python scripts/export_results.py "$runReport/logs/execucao.log" --output-prefix 
 python scripts/build_dashboard.py $runReport
 ```
 
-O cen?rio garante tr?s itera??es por VU. O perfil hist?rico `parallel.js` mant?m duas contas e uma itera??o por VU. Para testar com apenas uma conta,
-substitua `tests/k6/final_validation.js` por `tests/k6/login.js` (1 VU / 1 itera??o).
-Execute a exporta??o tamb?m se o k6 reprovar; ela preserva tentativas com erro.
-Abra `$runReport/html/dashboard.html` no navegador. N?o exige servidor ou internet.
-O gerador l? o formato legado de `--summary-export` e as amostras de m?tricas.
+Abra `$runReport/html/dashboard.html` no navegador; funciona offline.
+Execute o conversor mesmo se o teste reprovar para preservar registros de falha.
+O gerador utiliza o formato legado de --summary-export.
+Para 1 VU / 1 iteracao, use `tests/k6/login.js`; para 2 VUs / 1 iteracao por
+usuario, use `tests/k6/parallel.js` no mesmo comando.
 
-## Volumetrias: configurar, sem executar
+## Volumetrias: somente configuracao
 
-| Arquivo em tests/k6/ | Meta | Refer?ncia por pedido | VUs iniciais / limite |
+| Arquivo em tests/k6/ | Meta | Referencia por pedido | VUs iniciais / limite |
 | --- | --- | --- | --- |
 | volumetry1.js | 1.000 em 1 h | 60 s | 17 / 25 |
 | volumetry2.js | 5.000 em 2 h | 90 s | 63 / 95 |
 | volumetry3.js | 100.000 em 4 h | 120 s | 834 / 1.251 |
 
-Usam `constant-arrival-rate` e dimensionamento por taxa ? dura??o. Controlam
-in?cios de compra; pedidos confirmados dependem do sucesso dos checkouts.
-A massa pequena n?o cobre os limites dos perfis. Para validar a configura??o
-sem fazer requisi??es:
+Usam constant-arrival-rate e dimensionamento por taxa x duracao.
+Agendam tentativas; pedidos confirmados dependem do sucesso dos checkouts.
+A massa pequena nao cobre os limites desses perfis. Inspecionar sem executar:
 
 ```powershell
 k6 inspect tests/k6/volumetry1.js
@@ -79,31 +91,34 @@ k6 inspect tests/k6/volumetry2.js
 k6 inspect tests/k6/volumetry3.js
 ```
 
-## Configura??o e manuten??o
+## Configuracao e estrutura
 
-- `EXPECTED_ORDER_STATUS`: status esperado opcional, por exemplo `Pending`.
-- `CHECKOUT_FIRST_NAME`, `CHECKOUT_LAST_NAME`, `CHECKOUT_COUNTRY`,
-  `CHECKOUT_STATE`, `CHECKOUT_CITY`, `CHECKOUT_ADDRESS`, `CHECKOUT_ZIP` e
-  `CHECKOUT_PHONE`: dados fict?cios usados quando n?o houver endere?o cadastrado.
-- Checkout usa pagamento na entrega; falha se o m?todo estiver indispon?vel.
-- Consulta de pedido existente sem outra compra:
-
-```powershell
-$env:ORDER_ID = '<ID de pedido da primeira conta da massa>'
-k6 run tests/k6/verify_order.js
+```text
+tests/k6/    Fluxo e cenarios k6
+scripts/     Cadastro, exportacao, dashboard e limpeza
+data/        Massa local, fora do Git
+report/      Relatorio e execucoes com logs/, json/, csv/ e html/
 ```
 
-A consulta usa a primeira conta da massa; escolha um pedido pertencente a ela.
-Para limpeza, veja [report/README.md](report/README.md). O script mant?m cinco
-execu??es recentes e preserva as marcadas com `ENTREGA`:
+- EXPECTED_ORDER_STATUS: status esperado opcional, por exemplo Pending.
+- CHECKOUT_FIRST_NAME, CHECKOUT_LAST_NAME, CHECKOUT_COUNTRY, CHECKOUT_STATE,
+  CHECKOUT_CITY, CHECKOUT_ADDRESS, CHECKOUT_ZIP e CHECKOUT_PHONE: endereco
+  ficticio quando nao houver endereco cadastrado.
+- Checkout exige pagamento na entrega disponivel.
+- Para consultar pedido existente sem nova compra, configure USERS_FILE,
+  defina ORDER_ID e execute `k6 run tests/k6/verify_order.js`. O pedido deve
+  pertencer a primeira conta da massa.
+
+## Retencao das evidencias
+
+`cleanup_reports.py` mantem cinco execucoes recentes e preserva as pastas
+com um arquivo vazio ENTREGA. Apenas simula sem --apply:
 
 ```powershell
 python scripts/cleanup_reports.py
-# Excluir apenas ap?s conferir a simula??o:
+# Conferir a lista antes de excluir:
 python scripts/cleanup_reports.py --apply
 ```
 
-As evid?ncias em `report/execucoes/` s?o versionadas no Git para acompanhar a
-entrega. Credenciais em `data/` continuam exclu?das. O marcador `ENTREGA`
-protege da limpeza local, mas n?o ? backup. A limpeza de evid?ncias versionadas
-produz exclus?es locais que devem ser revisadas antes de um novo commit.
+A limpeza e manual e nao e backup. As evidencias sao versionadas: exclusoes
+locais devem ser revisadas antes de um commit. Credenciais continuam fora do Git.
