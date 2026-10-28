@@ -1,0 +1,124 @@
+RELATORIO - TESTE PRATICO DE PERFORMANCE
+Aplicacao: https://demowebshop.tricentis.com/
+Ferramentas: k6 (JavaScript) e Python 3 (biblioteca padrao)
+Data: 27/10/2026
+
+1. ESTRATEGIA E CONSTRUCAO
+
+Foi escolhido um teste HTTP com k6 para simular compras completas, correlacionar
+variaveis dinamicas e medir cada etapa. O fluxo foi dividido em modulos para
+reutilizacao nos testes pequenos e nos tres perfis de volumetria.
+
+Como nao havia massa fornecida, scripts/register_users.py foi criado para
+cadastrar contas com dados ficticios na aplicacao real. Cada cadastro e validado
+por um novo login em sessao separada antes de salvar a credencial em JSON.
+Foram criadas duas contas, tambem verificadas manualmente. O cadastro ocorre
+antes do teste, fora das medicoes. Cada VU utiliza uma conta distinta, carregada
+via SharedArray, evitando compartilhar carrinhos. Credenciais ficam em data/,
+ignoradas pelo Git, e nao sao incluidas nos resultados.
+
+Etapas do desafio, implementadas em tests/k6/:
+5.1 - login.js: abre o formulario, envia credenciais e confirma autenticacao
+pelo link de logout e ausencia de erros. O cookie jar do k6 mantem e reenvia
+os cookies da sessao entre requisicoes do mesmo VU. Falhas interrompem o fluxo.
+5.2 - products.js: consulta Books e extrai ID, nome e URL de compra de produtos
+com compra direta. Seleciona aleatoriamente um produto, sem ID fixo no codigo.
+5.3 - cart.js: adiciona uma unidade pela URL extraida, valida o retorno JSON
+e confirma a presenca do produto no carrinho pelo nome.
+5.4 - checkout.js: executa endereco, entrega, frete, pagamento e confirmacao
+por requisicoes AJAX. Reutiliza endereco cadastrado ou dados ficticios;
+correlaciona pais, estado, frete e etapas retornadas. Usa pagamento na entrega
+(Payments.CashOnDelivery) e extrai o ID do pedido na pagina de conclusao.
+5.5 - orders.js: consulta /orderdetails/{ID}, verifica a correspondencia do
+pedido e extrai seu status. EXPECTED_ORDER_STATUS permite exigir um status.
+A consulta ocorre uma vez, sem aguardar mudancas posteriores.
+5.6 - results.js: mede as etapas e emite um registro por tentativa no log,
+inclusive em falhas capturadas. scripts/export_results.py gera JSON e CSV
+com VU, iteracao, horarios, produto, pedido, status, tempos e eventual erro.
+A ultima etapa medida e 5.5; a gravacao do registro ocorre depois, em finally.
+
+Criterios configurados: checks e flow_success em 100%, falhas HTTP inferiores
+a 1% e p95 HTTP inferior a 2 segundos. Esses limites foram definidos no projeto,
+nao pelo enunciado. Tempo HTTP por requisicao difere do tempo total da compra.
+O sleep final foi removido apos o teste pequeno: nos perfis de chegada, o
+executor controla o ritmo sem espera artificial.
+
+2. VOLUMETRIAS - APENAS CONFIGURADAS
+
+Os tres perfis utilizam constant-arrival-rate para controlar os inicios de
+compra independentemente da duracao das respostas, enquanto houver VUs.
+Concorrencia estimada pela Lei de Little:
+VUs = arredondar para cima(taxa por segundo x tempo de referencia por pedido).
+Os tempos de 60/90/120 s sao referencias para dimensionamento, sem espera
+artificial ou novo threshold de duracao total por pedido.
+
+Perfil / arquivo        Meta              Referencia   VUs iniciais / limite
+1 - volumetry1.js       1.000 em 1 hora    60 s         17 / 25
+2 - volumetry2.js       5.000 em 2 horas   90 s         63 / 95
+3 - volumetry3.js       100.000 em 4 horas 120 s        834 / 1251
+
+Taxas configuradas: 1000, 2500 e 25000 inicios por hora, respectivamente.
+Calculos: (1000/3600)*60=16,67; (5000/7200)*90=62,5;
+(100000/14400)*120=833,33. Os limites oferecem margem para variacao de duracao.
+O gracefulStop permite mais 1 minuto, 90 segundos e 2 minutos, respectivamente,
+para concluir iteracoes iniciadas perto do fim. Conclusoes podem ocorrer depois
+da janela de chegada. dropped_iterations count==0 exige que nao haja descartes.
+
+A taxa agenda tentativas, nao garante pedidos confirmados: a meta depende de
+sucesso dos checkouts. Uma eventual execucao exigiria massa com contas distintas
+para cobrir o limite de VUs de cada perfil e capacidade do gerador de carga.
+As duas contas atuais servem ao teste pequeno, nao aos perfis grandes.
+Todos os perfis foram validados com k6 inspect, sem executar as cargas,
+conforme permitido pelo desafio.
+
+3. RESULTADOS OBTIDOS
+
+Evidencia principal: report/execucoes/2026-10-27-2vu/.
+Foram executados 2 VUs em paralelo, uma iteracao por VU, com per-vu-iterations
+(tests/k6/parallel.js). Login e carrinhos vazios foram conferidos previamente.
+Ambos concluiram login, busca, carrinho, checkout e consulta na mesma iteracao.
+
+- Fluxos completos aprovados: 2/2 (100%). Checks: 54/54 aprovados.
+- HTTP: 31 requisicoes, nenhuma falha; todos os thresholds aprovados.
+- Duracao HTTP: media 720,80 ms; p95 1413,30 ms; maxima 4597,06 ms.
+- VU 1: pedido 2406111, status Pending, fluxo de 13.898 ms.
+- VU 2: pedido 2406109, status Pending, fluxo de 9.876 ms.
+
+Uma resposta acima de 2 s nao reprova isoladamente o criterio de p95.
+Os tempos do fluxo incluem processamento local e excluem a emissao do registro
+e a pausa final existente naquela versao. O teste de baixo volume demonstra
+funcionamento do fluxo, sem conclusoes sobre capacidade ou estabilidade em carga.
+
+A evidencia anterior (2026-10-27-1vu) permanece como historico de diagnostico:
+um pedido foi criado, a extracao do status falhou e a consulta foi corrigida
+e revalidada separadamente. Essa tentativa original nao foi reclassificada como
+sucesso. Depois, a execucao paralela acima validou o fluxo completo corrigido.
+
+4. EVIDENCIAS E ENTREGA
+
+Estrutura: tests/k6/ para testes; scripts/ para utilitarios; data/ para massa;
+report/ para este relatorio e execucoes. Cada execucao separa logs/, json/,
+csv/ e html/. A evidencia principal inclui:
+- json/resumo.json e json/metricas.json: resumo e amostras k6.
+- json/pedidos.json e csv/pedidos.csv: registros de cada tentativa.
+- logs/execucao.log: log da execucao.
+- html/dashboard.html: indicadores, grafico HTTP e tabela de pedidos.
+
+O dashboard e gerado por scripts/build_dashboard.py, funciona offline e mostra
+resultados por conjunto de evidencias, sem misturar compra e reconsulta.
+Comandos de reproducao estao no README.md. Resultados sao ignorados pelo Git:
+as evidencias precisam acompanhar a entrega separadamente.
+A limpeza manual (cleanup_reports.py) mantem as cinco execucoes mais recentes,
+preserva pastas com marcador ENTREGA e apenas simula sem a opcao --apply.
+
+5. LIMITACOES E MELHORIAS
+
+- Automatizar a verificacao de carrinho vazio: atualmente foi feita antes do
+  teste aprovado. A adicao valida presenca pelo nome, nao incremento da quantidade.
+- Validar sessao expirada, pedido inacessivel e falhas intermediarias.
+- Manter o ID recuperavel se o servidor criar o pedido, mas sua resposta falhar.
+- Emails ficticios nao recebem mensagens; confirmacao por email nao foi validada.
+- Interrupcao forcada pode impedir o registro da tentativa em andamento.
+
+Referencia do fluxo de checkout consultada:
+https://demowebshop.tricentis.com/Scripts/public.onepagecheckout.js

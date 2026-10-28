@@ -1,0 +1,8 @@
+users*.json
+execucao*.log
+metricas*.json
+pedidos*.json
+pedidos*.csv
+__pycache__/
+data/*.json
+report/execucoes/
