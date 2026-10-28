@@ -1,7 +1,7 @@
 # Retencao de resultados
 
 Cada execucao fica em `execucoes/AAAA-MM-DD-HHmmss/`, com subpastas
-`logs/`, `json/`, `csv/` e `html/`. Os resultados nao sao versionados no Git.
+`logs/`, `json/`, `csv/` e `html/`. As evidencias sao versionadas no Git para acompanhar a entrega.
 
 Manter as cinco execucoes mais recentes, ordenadas pela data e hora no nome.
 Nomes antigos como `2026-10-27-1vu` usam a data com horario 00:00:00.
@@ -25,3 +25,6 @@ como evidencia de entrega, crie um arquivo vazio chamado `ENTREGA` dentro dela.
 Execucoes protegidas sao mantidas alem das cinco recentes. O script limita
 a exclusao a subpastas diretas de `report/execucoes`, ignorando links e junctions.
 O `relatorio.txt` fica fora dessa limpeza.
+
+A limpeza de arquivos versionados aparece como exclusao no git status.
+Revise essas exclusoes antes de criar novos commits.

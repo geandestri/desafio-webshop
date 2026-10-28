@@ -1,0 +1,148 @@
+{
+    "root_group": {
+        "checks": {},
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+                "Open login page": {
+                    "name": "Open login page",
+                    "path": "::Open login page",
+                    "id": "4ea7fbfaca4bba922c523d8337fa8176",
+                    "groups": {},
+                    "checks": {
+                            "login page loaded successfully": {
+                                "passes": 0,
+                                "fails": 1,
+                                "name": "login page loaded successfully",
+                                "path": "::Open login page::login page loaded successfully",
+                                "id": "c4425cdff235eba1dcbaf0fad30b464e"
+                            },
+                            "login form is available": {
+                                "name": "login form is available",
+                                "path": "::Open login page::login form is available",
+                                "id": "36a8af75f4a91bfcdf39ddf80932ac17",
+                                "passes": 0,
+                                "fails": 1
+                            }
+                        }
+                },
+                "Submit login form": {
+                    "name": "Submit login form",
+                    "path": "::Submit login form",
+                    "id": "d146adb7ddd3cc8781a2de2e2873b38e",
+                    "groups": {},
+                    "checks": {}
+                }
+            }
+    },
+    "metrics": {
+        "http_req_blocked": {
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0
+        },
+        "iterations": {
+            "count": 1,
+            "rate": 28.642297799698685
+        },
+        "checks": {
+            "passes": 0,
+            "fails": 2,
+            "thresholds": {
+                "rate==1": true
+            },
+            "value": 0
+        },
+        "http_req_duration": {
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "data_sent": {
+            "count": 0,
+            "rate": 0
+        },
+        "http_req_waiting": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0
+        },
+        "data_received": {
+            "count": 0,
+            "rate": 0
+        },
+        "iteration_duration": {
+            "min": 34.3756,
+            "med": 34.3756,
+            "max": 34.3756,
+            "p(90)": 34.3756,
+            "p(95)": 34.3756,
+            "avg": 34.3756
+        },
+        "http_req_tls_handshaking": {
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0
+        },
+        "http_req_failed": {
+            "passes": 2,
+            "fails": 0,
+            "thresholds": {
+                "rate<0.01": true
+            },
+            "value": 1
+        },
+        "http_reqs": {
+            "count": 2,
+            "rate": 57.28459559939737
+        },
+        "http_req_connecting": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0
+        },
+        "http_req_sending": {
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0
+        },
+        "http_req_receiving": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "group_duration": {
+            "avg": 16.93495,
+            "min": 1.0664,
+            "med": 16.93495,
+            "max": 32.8035,
+            "p(90)": 29.62979,
+            "p(95)": 31.216645
+        }
+    }
+}

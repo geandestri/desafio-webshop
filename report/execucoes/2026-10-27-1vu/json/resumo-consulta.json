@@ -1,0 +1,233 @@
+{
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "Open login page": {
+                "name": "Open login page",
+                "path": "::Open login page",
+                "id": "4ea7fbfaca4bba922c523d8337fa8176",
+                "groups": {},
+                "checks": {
+                        "login page loaded successfully": {
+                            "fails": 0,
+                            "name": "login page loaded successfully",
+                            "path": "::Open login page::login page loaded successfully",
+                            "id": "c4425cdff235eba1dcbaf0fad30b464e",
+                            "passes": 1
+                        },
+                        "login form is available": {
+                            "name": "login form is available",
+                            "path": "::Open login page::login form is available",
+                            "id": "36a8af75f4a91bfcdf39ddf80932ac17",
+                            "passes": 1,
+                            "fails": 0
+                        }
+                    }
+            },
+            "Submit login form": {
+                "name": "Submit login form",
+                "path": "::Submit login form",
+                "id": "d146adb7ddd3cc8781a2de2e2873b38e",
+                "groups": {},
+                "checks": {
+                        "login response status is 200": {
+                            "fails": 0,
+                            "name": "login response status is 200",
+                            "path": "::Submit login form::login response status is 200",
+                            "id": "527593fb6b17aa99e5faf354ba2f0909",
+                            "passes": 1
+                        },
+                        "login did not fail with invalid credentials": {
+                            "name": "login did not fail with invalid credentials",
+                            "path": "::Submit login form::login did not fail with invalid credentials",
+                            "id": "7c471c6c64ff7a21bb668a19ae50f701",
+                            "passes": 1,
+                            "fails": 0
+                        },
+                        "authenticated session confirmed": {
+                            "id": "1392e55e4fab164cfe20596471b63245",
+                            "passes": 1,
+                            "fails": 0,
+                            "name": "authenticated session confirmed",
+                            "path": "::Submit login form::authenticated session confirmed"
+                        }
+                    }
+            },
+            "5.5 - Consulta do status do pedido": {
+                "path": "::5.5 - Consulta do status do pedido",
+                "id": "0d05bdfb613e6bdf286214b162eb1fef",
+                "groups": {},
+                "checks": {
+                        "consulta do pedido retornou HTTP 200": {
+                            "id": "c47b0ba6be5ff46f8f71294d65fd135b",
+                            "passes": 1,
+                            "fails": 0,
+                            "name": "consulta do pedido retornou HTTP 200",
+                            "path": "::5.5 - Consulta do status do pedido::consulta do pedido retornou HTTP 200"
+                        },
+                        "pagina de detalhes do pedido encontrada": {
+                            "fails": 0,
+                            "name": "pagina de detalhes do pedido encontrada",
+                            "path": "::5.5 - Consulta do status do pedido::pagina de detalhes do pedido encontrada",
+                            "id": "4ec4248dee9af7830414a092654d7310",
+                            "passes": 1
+                        },
+                        "ID consultado corresponde ao pedido criado": {
+                            "name": "ID consultado corresponde ao pedido criado",
+                            "path": "::5.5 - Consulta do status do pedido::ID consultado corresponde ao pedido criado",
+                            "id": "bd34daf00bbcec59697c57ebe83f62ac",
+                            "passes": 1,
+                            "fails": 0
+                        },
+                        "status do pedido reconhecido": {
+                            "name": "status do pedido reconhecido",
+                            "path": "::5.5 - Consulta do status do pedido::status do pedido reconhecido",
+                            "id": "3243cbec61a276aa223a556984a81049",
+                            "passes": 1,
+                            "fails": 0
+                        },
+                        "status corresponde ao esperado quando configurado": {
+                            "passes": 1,
+                            "fails": 0,
+                            "name": "status corresponde ao esperado quando configurado",
+                            "path": "::5.5 - Consulta do status do pedido::status corresponde ao esperado quando configurado",
+                            "id": "99a932ad7a49f55cf986ec39117b01ca"
+                        }
+                    },
+                "name": "5.5 - Consulta do status do pedido"
+            }
+        },
+        "checks": {}
+    },
+    "metrics": {
+        "data_received": {
+            "count": 90482,
+            "rate": 33630.647755519814
+        },
+        "iteration_duration": {
+            "max": 2689.9342,
+            "p(90)": 2689.9342,
+            "p(95)": 2689.9342,
+            "avg": 2689.9342,
+            "min": 2689.9342,
+            "med": 2689.9342
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "http_req_sending": {
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0
+        },
+        "http_req_tls_handshaking": {
+            "p(95)": 396.33374999999984,
+            "avg": 116.56875,
+            "min": 0,
+            "med": 0,
+            "max": 466.275,
+            "p(90)": 326.39250000000004
+        },
+        "data_sent": {
+            "rate": 1545.830817347173,
+            "count": 4159
+        },
+        "iterations": {
+            "count": 1,
+            "rate": 0.3716832934232202
+        },
+        "http_req_blocked": {
+            "avg": 170.879525,
+            "min": 0,
+            "med": 0,
+            "max": 683.5181,
+            "p(90)": 478.4626700000001,
+            "p(95)": 580.9903849999997
+        },
+        "flow_success": {
+            "passes": 1,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "http_reqs": {
+            "rate": 1.4867331736928808,
+            "count": 4
+        },
+        "vus_max": {
+            "min": 1,
+            "max": 1,
+            "value": 1
+        },
+        "checks": {
+            "passes": 10,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "http_req_connecting": {
+            "p(90)": 130.86528000000004,
+            "p(95)": 158.90783999999994,
+            "avg": 46.7376,
+            "min": 0,
+            "med": 0,
+            "max": 186.9504
+        },
+        "http_req_waiting": {
+            "max": 554.2002,
+            "p(90)": 536.36391,
+            "p(95)": 545.282055,
+            "avg": 447.720775,
+            "min": 284.771,
+            "med": 475.95595000000003
+        },
+        "http_req_duration{expected_response:true}": {
+            "p(95)": 667.784375,
+            "avg": 499.4346,
+            "min": 284.771,
+            "med": 513.2623,
+            "max": 686.4428,
+            "p(90)": 649.1259500000001
+        },
+        "http_req_receiving": {
+            "p(90)": 136.54376000000005,
+            "p(95)": 164.12032999999994,
+            "avg": 51.713825,
+            "min": 0,
+            "med": 7.5792,
+            "max": 191.6969
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 4,
+            "value": 0
+        },
+        "http_req_duration": {
+            "avg": 499.4346,
+            "min": 284.771,
+            "med": 513.2623,
+            "max": 686.4428,
+            "p(90)": 649.1259500000001,
+            "p(95)": 667.784375
+        },
+        "group_duration": {
+            "avg": 896.6447333333334,
+            "min": 563.0972,
+            "med": 756.3558,
+            "max": 1370.4812,
+            "p(90)": 1247.65612,
+            "p(95)": 1309.06866
+        }
+    }
+}

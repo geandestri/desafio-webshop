@@ -1,0 +1,8 @@
+Produto adicionado: id=22, nome=Health Book
+Produto adicionado: id=45, nome=Fiction
+Pedido criado: id=2406109
+Pedido consultado: id=2406109, status=Pending
+RESULTADO_PEDIDO {"vu":2,"iteration":0,"startedAt":"2026-10-27T21:30:45.373Z","success":true,"productId":"22","orderId":"2406109","status":"Pending","stageDurationsMs":{"5.1_login":2180,"5.2_products":567,"5.3_cart":964,"5.4_checkout":5293,"5.5_order_status":871},"lastStage":"5.5_order_status","statusHttp":200,"statusRequestDurationMs":870.1991,"queriedAt":"2026-10-27T21:30:55.249Z","finishedAt":"2026-10-27T21:30:55.249Z","totalDurationMs":9876}
+Pedido criado: id=2406111
+Pedido consultado: id=2406111, status=Pending
+RESULTADO_PEDIDO {"vu":1,"iteration":0,"startedAt":"2026-10-27T21:30:45.373Z","success":true,"productId":"45","orderId":"2406111","status":"Pending","stageDurationsMs":{"5.1_login":2208,"5.2_products":4599,"5.3_cart":1059,"5.4_checkout":5102,"5.5_order_status":929},"lastStage":"5.5_order_status","statusHttp":200,"statusRequestDurationMs":926.8926,"queriedAt":"2026-10-27T21:30:59.271Z","finishedAt":"2026-10-27T21:30:59.271Z","totalDurationMs":13898}

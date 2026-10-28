@@ -1,0 +1,210 @@
+{
+    "root_group": {
+        "checks": {},
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+                "Open login page": {
+                    "name": "Open login page",
+                    "path": "::Open login page",
+                    "id": "4ea7fbfaca4bba922c523d8337fa8176",
+                    "groups": {},
+                    "checks": {
+                            "login page loaded successfully": {
+                                "fails": 0,
+                                "name": "login page loaded successfully",
+                                "path": "::Open login page::login page loaded successfully",
+                                "id": "c4425cdff235eba1dcbaf0fad30b464e",
+                                "passes": 1
+                            },
+                            "login form is available": {
+                                "name": "login form is available",
+                                "path": "::Open login page::login form is available",
+                                "id": "36a8af75f4a91bfcdf39ddf80932ac17",
+                                "passes": 1,
+                                "fails": 0
+                            }
+                        }
+                },
+                "Submit login form": {
+                    "name": "Submit login form",
+                    "path": "::Submit login form",
+                    "id": "d146adb7ddd3cc8781a2de2e2873b38e",
+                    "groups": {},
+                    "checks": {
+                            "login response status is 200": {
+                                "name": "login response status is 200",
+                                "path": "::Submit login form::login response status is 200",
+                                "id": "527593fb6b17aa99e5faf354ba2f0909",
+                                "passes": 1,
+                                "fails": 0
+                            },
+                            "login did not fail with invalid credentials": {
+                                "name": "login did not fail with invalid credentials",
+                                "path": "::Submit login form::login did not fail with invalid credentials",
+                                "id": "7c471c6c64ff7a21bb668a19ae50f701",
+                                "passes": 1,
+                                "fails": 0
+                            },
+                            "authenticated session confirmed": {
+                                "passes": 1,
+                                "fails": 0,
+                                "name": "authenticated session confirmed",
+                                "path": "::Submit login form::authenticated session confirmed",
+                                "id": "1392e55e4fab164cfe20596471b63245"
+                            }
+                        }
+                },
+                "5.2 - Busca de produtos": {
+                    "name": "5.2 - Busca de produtos",
+                    "path": "::5.2 - Busca de produtos",
+                    "id": "8b5351c5523e8e644c4b442c8d29939a",
+                    "groups": {},
+                    "checks": {
+                            "listagem carregada": {
+                                "fails": 0,
+                                "name": "listagem carregada",
+                                "path": "::5.2 - Busca de produtos::listagem carregada",
+                                "id": "b606f090bdb4ae1307628353295874a1",
+                                "passes": 1
+                            },
+                            "IDs de produtos extraidos": {
+                                "name": "IDs de produtos extraidos",
+                                "path": "::5.2 - Busca de produtos::IDs de produtos extraidos",
+                                "id": "00b6da8d0ffe24de221bc28058795bb4",
+                                "passes": 0,
+                                "fails": 1
+                            }
+                        }
+                }
+            }
+    },
+    "metrics": {
+        "http_req_tls_handshaking": {
+            "max": 446.1082,
+            "p(90)": 312.2757400000001,
+            "p(95)": 379.19196999999986,
+            "avg": 111.52705,
+            "min": 0,
+            "med": 0
+        },
+        "http_req_receiving": {
+            "med": 8.0447,
+            "max": 193.2264,
+            "p(90)": 138.00639000000007,
+            "p(95)": 165.61639499999995,
+            "avg": 52.380275000000005,
+            "min": 0.2053
+        },
+        "iteration_duration": {
+            "p(95)": 2587.2795,
+            "avg": 2587.2795,
+            "min": 2587.2795,
+            "med": 2587.2795,
+            "max": 2587.2795,
+            "p(90)": 2587.2795
+        },
+        "http_req_duration": {
+            "avg": 478.116575,
+            "min": 303.4689,
+            "med": 505.96725000000004,
+            "max": 597.0629,
+            "p(90)": 577.8191300000001,
+            "p(95)": 587.441015,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "data_received": {
+            "count": 94248,
+            "rate": 36406.160926139855
+        },
+        "vus_max": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "data_sent": {
+            "count": 4144,
+            "rate": 1600.7462320465531
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 4,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "http_req_connecting": {
+            "max": 187.0571,
+            "p(90)": 130.93997000000002,
+            "p(95)": 158.99853499999992,
+            "avg": 46.764275,
+            "min": 0,
+            "med": 0
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 478.116575,
+            "min": 303.4689,
+            "med": 505.96725000000004,
+            "max": 597.0629,
+            "p(90)": 577.8191300000001,
+            "p(95)": 587.441015
+        },
+        "group_duration": {
+            "avg": 862.4265,
+            "min": 534.453,
+            "med": 792.5772,
+            "max": 1260.2493,
+            "p(90)": 1166.71488,
+            "p(95)": 1213.48209
+        },
+        "iterations": {
+            "count": 1,
+            "rate": 0.38628046140119526
+        },
+        "checks": {
+            "passes": 6,
+            "fails": 1,
+            "thresholds": {
+                "rate==1": true
+            },
+            "value": 0.8571428571428571
+        },
+        "http_req_waiting": {
+            "avg": 425.48375,
+            "min": 302.7572,
+            "med": 436.59524999999996,
+            "max": 525.9873,
+            "p(90)": 509.14845,
+            "p(95)": 517.567875
+        },
+        "http_req_blocked": {
+            "min": 0,
+            "med": 0,
+            "max": 662.621,
+            "p(90)": 463.8347000000001,
+            "p(95)": 563.2278499999998,
+            "avg": 165.65525
+        },
+        "http_reqs": {
+            "rate": 1.545121845604781,
+            "count": 4
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "http_req_sending": {
+            "avg": 0.25255,
+            "min": 0,
+            "med": 0.2519,
+            "max": 0.5064,
+            "p(90)": 0.50562,
+            "p(95)": 0.50601
+        }
+    }
+}

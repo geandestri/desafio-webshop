@@ -1,0 +1,2 @@
+﻿vu,iteration,startedAt,finishedAt,success,productId,orderId,status,statusHttp,queriedAt,lastStage,error,totalDurationMs,statusRequestDurationMs,5.1_login_ms,5.2_products_ms,5.3_cart_ms,5.4_checkout_ms,5.5_order_status_ms
+1,0,2026-10-27T21:03:34.749Z,2026-10-27T21:03:37.439Z,True,,2406107,Pending,200,2026-10-27T21:03:37.439Z,5.5_order_status,,2690,562.0533,2126,,,,564

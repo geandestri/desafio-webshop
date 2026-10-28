@@ -5,4 +5,4 @@ pedidos*.json
 pedidos*.csv
 __pycache__/
 data/*.json
-report/execucoes/
+!report/execucoes/**

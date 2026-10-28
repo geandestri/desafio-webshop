@@ -1,0 +1,2 @@
+﻿vu,iteration,startedAt,finishedAt,success,productId,orderId,status,statusHttp,queriedAt,lastStage,error,totalDurationMs,statusRequestDurationMs,5.1_login_ms,5.2_products_ms,5.3_cart_ms,5.4_checkout_ms,5.5_order_status_ms
+1,0,2026-10-27T21:02:43.192Z,2026-10-27T21:02:54.629Z,False,45,2406107,,,,5.5_order_status,Falha na validacao do pedido 2406107; status extraido: ausente.,11437,,2284,519,997,4341,3295

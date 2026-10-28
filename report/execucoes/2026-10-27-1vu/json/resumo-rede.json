@@ -1,0 +1,203 @@
+{
+    "metrics": {
+        "vus_max": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "http_req_receiving": {
+            "p(90)": 136.96526000000003,
+            "p(95)": 164.06272999999993,
+            "avg": 52.346000000000004,
+            "min": 0,
+            "med": 9.1119,
+            "max": 191.1602
+        },
+        "http_req_tls_handshaking": {
+            "avg": 118.978875,
+            "min": 0,
+            "med": 0,
+            "max": 475.9155,
+            "p(90)": 333.1408500000001,
+            "p(95)": 404.52817499999986
+        },
+        "iterations": {
+            "count": 1,
+            "rate": 0.35401060920234295
+        },
+        "checks": {
+            "passes": 6,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "data_sent": {
+            "count": 4144,
+            "rate": 1467.0199645345092
+        },
+        "iteration_duration": {
+            "avg": 2824.2543,
+            "min": 2824.2543,
+            "med": 2824.2543,
+            "max": 2824.2543,
+            "p(90)": 2824.2543,
+            "p(95)": 2824.2543
+        },
+        "http_reqs": {
+            "count": 4,
+            "rate": 1.4160424368093718
+        },
+        "http_req_blocked": {
+            "p(95)": 600.9906299999998,
+            "avg": 176.76195,
+            "min": 0,
+            "med": 0,
+            "max": 707.0478,
+            "p(90)": 494.93346000000014
+        },
+        "group_duration": {
+            "max": 1334.7656,
+            "p(90)": 1253.06714,
+            "p(95)": 1293.91637,
+            "avg": 940.2569333333334,
+            "min": 559.7319,
+            "med": 926.2733
+        },
+        "http_req_sending": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "data_received": {
+            "count": 94248,
+            "rate": 33364.79189610242
+        },
+        "http_req_duration{expected_response:true}": {
+            "max": 627.199,
+            "p(90)": 622.30246,
+            "p(95)": 624.75073,
+            "avg": 524.011925,
+            "min": 299.8403,
+            "med": 584.5042000000001
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 4,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "http_req_connecting": {
+            "p(90)": 131.41534000000004,
+            "p(95)": 159.57576999999992,
+            "avg": 46.93405,
+            "min": 0,
+            "med": 0,
+            "max": 187.7362
+        },
+        "http_req_waiting": {
+            "min": 299.8403,
+            "med": 493.2283,
+            "max": 600.3668,
+            "p(90)": 585.3821,
+            "p(95)": 592.87445,
+            "avg": 471.665925
+        },
+        "http_req_duration": {
+            "med": 584.5042000000001,
+            "max": 627.199,
+            "p(90)": 622.30246,
+            "p(95)": 624.75073,
+            "avg": 524.011925,
+            "min": 299.8403,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        }
+    },
+    "root_group": {
+        "checks": {},
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+                "Open login page": {
+                    "name": "Open login page",
+                    "path": "::Open login page",
+                    "id": "4ea7fbfaca4bba922c523d8337fa8176",
+                    "groups": {},
+                    "checks": {
+                            "login page loaded successfully": {
+                                "name": "login page loaded successfully",
+                                "path": "::Open login page::login page loaded successfully",
+                                "id": "c4425cdff235eba1dcbaf0fad30b464e",
+                                "passes": 1,
+                                "fails": 0
+                            },
+                            "login form is available": {
+                                "name": "login form is available",
+                                "path": "::Open login page::login form is available",
+                                "id": "36a8af75f4a91bfcdf39ddf80932ac17",
+                                "passes": 1,
+                                "fails": 0
+                            }
+                        }
+                },
+                "Submit login form": {
+                    "path": "::Submit login form",
+                    "id": "d146adb7ddd3cc8781a2de2e2873b38e",
+                    "groups": {},
+                    "checks": {
+                            "login response status is 200": {
+                                "passes": 1,
+                                "fails": 0,
+                                "name": "login response status is 200",
+                                "path": "::Submit login form::login response status is 200",
+                                "id": "527593fb6b17aa99e5faf354ba2f0909"
+                            },
+                            "login did not fail with invalid credentials": {
+                                "passes": 1,
+                                "fails": 0,
+                                "name": "login did not fail with invalid credentials",
+                                "path": "::Submit login form::login did not fail with invalid credentials",
+                                "id": "7c471c6c64ff7a21bb668a19ae50f701"
+                            },
+                            "authenticated session confirmed": {
+                                "name": "authenticated session confirmed",
+                                "path": "::Submit login form::authenticated session confirmed",
+                                "id": "1392e55e4fab164cfe20596471b63245",
+                                "passes": 1,
+                                "fails": 0
+                            }
+                        },
+                    "name": "Submit login form"
+                },
+                "5.2 - Busca de produtos": {
+                    "name": "5.2 - Busca de produtos",
+                    "path": "::5.2 - Busca de produtos",
+                    "id": "8b5351c5523e8e644c4b442c8d29939a",
+                    "groups": {},
+                    "checks": {
+                            "listagem carregada": {
+                                "id": "b606f090bdb4ae1307628353295874a1",
+                                "passes": 1,
+                                "fails": 0,
+                                "name": "listagem carregada",
+                                "path": "::5.2 - Busca de produtos::listagem carregada"
+                            }
+                        }
+                }
+            }
+    }
+}

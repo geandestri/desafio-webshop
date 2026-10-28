@@ -1,0 +1,22 @@
+[
+  {
+    "vu": 1,
+    "iteration": 0,
+    "startedAt": "2026-10-27T21:02:43.192Z",
+    "success": false,
+    "productId": "45",
+    "orderId": "2406107",
+    "status": null,
+    "stageDurationsMs": {
+      "5.1_login": 2284,
+      "5.2_products": 519,
+      "5.3_cart": 997,
+      "5.4_checkout": 4341,
+      "5.5_order_status": 3295
+    },
+    "lastStage": "5.5_order_status",
+    "error": "Falha na validacao do pedido 2406107; status extraido: ausente.",
+    "finishedAt": "2026-10-27T21:02:54.629Z",
+    "totalDurationMs": 11437
+  }
+]

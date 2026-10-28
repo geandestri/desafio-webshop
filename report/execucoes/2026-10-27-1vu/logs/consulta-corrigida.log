@@ -1,0 +1,2 @@
+Pedido consultado: id=2406107, status=Pending
+RESULTADO_PEDIDO {"vu":1,"iteration":0,"startedAt":"2026-10-27T21:03:34.749Z","orderId":"2406107","success":true,"stageDurationsMs":{"5.1_login":2126,"5.5_order_status":564},"mode":"existing_order","lastStage":"5.5_order_status","status":"Pending","statusHttp":200,"statusRequestDurationMs":562.0533,"queriedAt":"2026-10-27T21:03:37.439Z","finishedAt":"2026-10-27T21:03:37.439Z","totalDurationMs":2690}

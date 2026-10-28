@@ -1,0 +1,12 @@
+[
+  {
+    "accountIndex": 1,
+    "loginConfirmed": true,
+    "cartEmpty": true
+  },
+  {
+    "accountIndex": 2,
+    "loginConfirmed": true,
+    "cartEmpty": true
+  }
+]

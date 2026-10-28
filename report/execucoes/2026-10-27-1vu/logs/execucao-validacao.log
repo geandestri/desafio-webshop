@@ -1,0 +1,1 @@
+RESULTADO_PEDIDO {"vu":1,"iteration":0,"startedAt":"2026-10-27T21:01:07.236Z","success":false,"productId":null,"orderId":null,"status":null,"stageDurationsMs":{"5.1_login":2052,"5.2_products":535},"lastStage":"5.2_products","error":"Nenhum produto com compra direta foi encontrado.","finishedAt":"2026-10-27T21:01:09.823Z","totalDurationMs":2587}

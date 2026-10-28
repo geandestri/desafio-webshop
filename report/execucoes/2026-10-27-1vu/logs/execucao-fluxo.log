@@ -1,0 +1,2 @@
+Produto adicionado: id=22, nome=Health Book
+RESULTADO_PEDIDO {"vu":1,"iteration":0,"startedAt":"2026-10-27T21:02:22.885Z","success":false,"productId":"22","orderId":null,"status":null,"stageDurationsMs":{"5.1_login":2129,"5.2_products":1076,"5.3_cart":1042,"5.4_checkout":2498},"lastStage":"5.4_checkout","error":"Etapa inesperada no checkout: shipping_method","finishedAt":"2026-10-27T21:02:29.631Z","totalDurationMs":6746}

@@ -101,5 +101,7 @@ python scripts/cleanup_reports.py
 python scripts/cleanup_reports.py --apply
 ```
 
-Resultados em `report/execucoes/` s?o ignorados pelo Git. Inclua a pasta da
-evid?ncia principal ao entregar o projeto; o marcador `ENTREGA` n?o ? backup.
+As evid?ncias em `report/execucoes/` s?o versionadas no Git para acompanhar a
+entrega. Credenciais em `data/` continuam exclu?das. O marcador `ENTREGA`
+protege da limpeza local, mas n?o ? backup. A limpeza de evid?ncias versionadas
+produz exclus?es locais que devem ser revisadas antes de um novo commit.
